@@ -30,12 +30,12 @@ How to write a Makefile
 
  Simple make file for our project (dependency tree structure)	
 	
-all: main.o module.o 					 The dependencies of the target all 	
-	gcc main.o module.o -o target_bin	 The action to make the target all	
-main.o: main.c module.h 				 The dependencies fo the target main.o 	
-	gcc -I . -c main.c 					 The action to make the target main.o ,
+all: main.o module.o 					 dependencies of target all 	
+	gcc main.o module.o -o target_bin	 action to make target all	
+main.o: main.c module.h 				 dependencies fo target main.o 	
+	gcc -I . -c main.c 					 action to make target main.o ,
 module.o: module.c module.h														
-	gcc -I . -c module.c 				 -I tells the compiler header file locations	
+	gcc -I . -c module.c 				 -I indicate header file locations	
 clean:									 This target has no dependencies						
 	rm -rf *.o 													
 	rm target_bin
