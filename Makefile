@@ -40,12 +40,12 @@
 		rm target_bin
 
 
-###### How does make utilizes the timestamp of a file	\
+###### How does make utilize the timestamp of files	\
 	\
 	if	make found a dependency with a newer timestamp than the target, it will remake that \
 	target and all the targets that are depending on it. \
 	for example imagine we change the source file module.c. Then we tried to rebuild the 	\
-	program usking make. make will notice that the depenency file module.c has a newer timestamp	\
+	program usking make. make will notice that the dependency file module.c has a newer timestamp	\
 	than its target module.o. Therefore, it will remake the target module.o. However, the target 	\
 	all depends on module.o, as such make will remake the target all again which will result in a 	\
 	new target_bin binary file. Notice that make did not need to remake the main.o target because	\
@@ -66,8 +66,38 @@
 	A Recursive assignment expression is evaluated everytime the variable is encountered in the code. For example \
 	CC = ${GCC} {FLAGS} will be converted to gcc -W only when an action like ${CC} file.c is executed. \
 	However, if the variable GCC reassignment i.e GCC=c++ then the ${CC} will be converted to c++ -W 	\
-	after the reassignment. 
+	after the reassignment. \
+	\
+	Conditional assignment (?=)	\
+	Conditional assignment assigns a value to a variable only if it does not have a value	\
+	\
+	Appending (+=)	\
+	CC = gcc 	\
+	CC += -w 	\
+	CC now has the value gcc -W
 
+
+##### Using patterns and special variables	\
+	\
+	When wildcard % appears in the dependency list, it is replaced with	\
+	the same string that was used to perform substitution in the target.\
+	\
+	Inside actions we can use:	\
+		$@ to represent the full target naem of the current target 	\
+		$? returns the dependencies that are newer than the current target 	\
+		$* returns the text that corresponds to % in the target 	\
+		$< returns the name of the first dependency 	\
+		$^ returns the names of all the dependencies with space as the delimiter
+
+
+##### Action modifiers	\
+	\
+	- (minus) Prefixing an action with - tells make to ignore any error occurs	\
+	in that line. By default, execution of a Makefile stops when any command returns \
+	a non-zero (error) value. 	\
+	@ (at) suppresses the standard print-action-to-standard-output behaviour of make  \
+	For exampele, @echo OutputMessage will print "OutputMessage" and suppresses 	\
+	printing the action echo OutputMessage. 
 
 
 
