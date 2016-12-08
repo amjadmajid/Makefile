@@ -35,7 +35,7 @@ all: main.o module.o 				dependencies of target all
 main.o: main.c module.h 			dependencies fo target main.o 	
 	gcc -I . -c main.c 			action to make target main.o ,
 module.o: module.c module.h														
-	gcc -I . -c module.c 		-I indicate header file locations	
+	gcc -I . -c module.c 			-I indicate header file locations	
 clean:						This target has no dependencies						
 	rm -rf *.o 													
 	rm target_bin
