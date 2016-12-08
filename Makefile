@@ -100,6 +100,76 @@
 	printing the action echo OutputMessage. 
 
 
+##### Using PHONY to avoid file-target name conflicts	\
+	\
+	If the project directory contains a file with same names as a special target 	\
+	in the Makefile (i.e. all, clean), that will result in a conflict and make will	\
+	produce an error. Using .PHONY directive to specify which targets are not ot be  \
+	considered as files, for instance, .PHONY: all clean
+
+
+##### Check make execution before the actual building (dry run)	\
+	\
+	At times, maybe when developing the Makefile, we may want to trace the make 	\
+	execution (and view the logged messages) without actually running the actions,  \
+	which is time consuming. Simply use make -n to do a “dry run”.
+
+##### Nested Makefiles	\
+	\
+	To run a multiple make files in different directories, first  change directory 	\
+	and then invoke make. Using the environment variable $(MAKE) gives greater 	\
+	flexibility to run multiple Makefiles. For example, $(MAKE) enables passing the \
+	-n option for the "dry run"	\
+	subdir:	\
+		cd subdir %% $(MAKE)
+
+
+##### Using the shell command output in a variable 	\
+	\
+	Sometimes we need to use the output from one command/action in other places in the 	\
+	Makefile — for example, checking versions/locations of installed libraries, or other \
+	files required for compilation. We can obtain the shell output using the shell 		\
+	command. For example, to return a list of files in the current directory into a 	\
+	variable, we would run: LS_OUT = $(shell ls).
+
+
+##### Improved Makefile
+
+CC=gcc 					# The compiler to be used 
+OPTIONS= -g -Wall 		# -g: for debugging, -Wall:vfor additional messages
+INCLUDES=-I . 			# Directory for a header file (. = the current directory)
+OBJS = main.o module.o 	# list of objects to be built
+.PHONY: all clean		# tell the compiler that all and clean are not files 
+
+all:${OBJS}
+	@echo "Building..."	# print Building..., @ to suppress printing the action 
+	${CC} ${OPTIONS} ${INCLUDES} ${OBJS} -o target_bin
+
+%.o:%.c 				# pattern wildcard matching
+	${CC} ${OPTIONS} -c $*.c ${INCLUDES}
+
+list:
+	@echo $(shell ls)	# To print the output of the command 'ls'
+
+clean:
+	@echo "Cleaning up..."
+	-rm -rf *.o 		# - prefix for ingnoring errors and continue execution
+	-rm target_bin
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
