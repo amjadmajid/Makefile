@@ -20,12 +20,12 @@
 
 
 ## General remarkes 
-	1- By convention all variable's names used in a Makefile written in upper-case form,
+	1. By convention all variable's names used in a Makefile written in upper-case form,
 	i.e. CC = gcc.
-	2- A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
- 	3- If no target specified for make, make is defaulted to target the first target in 
+	2. A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
+ 	3. If no target specified for make, make is defaulted to target the first target in 
  	the Makefile.
-	4- Each make line is executed in a separate sub-shell environment. Therefore, a
+	4. Each make line is executed in a separate sub-shell environment. Therefore, a
  	command like cd newdir will not affect the next lines
 
 
