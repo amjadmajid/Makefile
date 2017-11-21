@@ -20,27 +20,24 @@
 
 
 ## General remarkes 
-	1. By convention all variable's names used in a Makefile written in upper-case form,
-	i.e. CC = gcc.
+	1. By convention,  variable's names are written in upper-case form, i.e. CC = gcc.
 	2. A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
- 	3. If no target specified for make, make is defaulted to target the first target in 
- 	the Makefile.
+ 	3. If no target is specified, make is defaulted to target the first target in the Makefile.
 	4. Each make line is executed in a separate sub-shell environment. Therefore, a
- 	command like cd newdir will not affect the next lines
+ 	command like `cd newdir` will not affect the next lines.
 
-
- Simple make file for our project (dependency tree structure)	
-	
-all: main.o module.o 				dependencies of target all 	
-	gcc main.o module.o -o target_bin	 action to make target all	
-main.o: main.c module.h 			dependencies fo target main.o 	
-	gcc -I . -c main.c 			action to make target main.o ,
+##  Simple make file for our project (dependency tree structure)
+```	
+all: main.o module.o 				 //dependencies of target all 	
+	gcc main.o module.o -o target_bin	 //action to make target all	
+main.o: main.c module.h 			 //dependencies fo target main.o 	
+	gcc -I . -c main.c 			 //action to make target main.o ,
 module.o: module.c module.h														
 	gcc -I . -c module.c 			-I indicate header file locations	
 clean:						This target has no dependencies						
 	rm -rf *.o 													
 	rm target_bin
-
+```
 
  How does make utilize the timestamp of files	
 	
