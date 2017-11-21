@@ -1,12 +1,12 @@
 # How to write a Makefile
 				
  ## Manual compilation
-	To manually compile a project and produce an executable follow the following instructions:
-
-	$ gcc -I . -c main.c  ->  main.o
-	$ gcc -I . -c module.c ->  module.o
-	$ gcc main.o module.o -o target_bin -> target binary
-	(-I is used to include the current directory (.) as a header file location.)
+To manually compile a project and produce an executable follow the following instructions:
+```
+$ gcc -I . -c main.c  ->  main.o
+$ gcc -I . -c module.c ->  module.o
+$ gcc main.o module.o -o target_bin -> target binary // -I is used to include the current directory (.) as a header file location.
+```
 
 
  ## General syntax of a Makefile
@@ -20,11 +20,11 @@
 
 
 ## General remarkes 
-	1. By convention,  variable's names are written in upper-case form, i.e. CC = gcc.
-	2. A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
- 	3. If no target is specified, make is defaulted to target the first target in the Makefile.
-	4. Each make line is executed in a separate sub-shell environment. Therefore, a
- 	command like `cd newdir` will not affect the next lines.
+1. By convention,  variable's names are written in upper-case form, i.e. CC = gcc.
+2. A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
+3. If no target is specified, make is defaulted to target the first target in the Makefile.
+4. Each make line is executed in a separate sub-shell environment. Therefore, a command like `cd newdir` will not affect the next lines.
+
 
 ##  Simple make file for our project (dependency tree structure)
 ```	
