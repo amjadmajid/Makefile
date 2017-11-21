@@ -19,12 +19,13 @@
     ...
 
 
- General remarkes 
-	 By convention, all variable names used in a Makefile are in upper-case
-	is CC = gcc, which can then be used later on as ${CC} or $(CC)
- 	if no target specified for make, make is defaulted to target the first target in 
- 	the Makefile Makefiles use  as the comment-start marker
- 	Each make line is executed in a separate sub-shell environment. Therefore, a 
+## General remarkes 
+	1- By convention all variable's names used in a Makefile written in upper-case form,
+	i.e. CC = gcc.
+	2- A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
+ 	3- If no target specified for make, make is defaulted to target the first target in 
+ 	the Makefile.
+	4- Each make line is executed in a separate sub-shell environment. Therefore, a
  	command like cd newdir will not affect the next lines
 
 
