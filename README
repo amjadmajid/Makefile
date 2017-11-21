@@ -1,6 +1,6 @@
-#How to write a Makefile
+# How to write a Makefile
 				
- ##Manual compilation
+ ## Manual compilation
 	To manually compile a project and produce an executable follow the following instructions:
 
 	$ gcc -I . -c main.c  ->  main.o
@@ -9,7 +9,7 @@
 	(-I is used to include the current directory (.) as a header file location.)
 
 
- ##General syntax of a Makefile
+ ## General syntax of a Makefile
 
 	The general syntax of a Makefile rule is as follows:
 
