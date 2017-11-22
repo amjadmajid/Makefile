@@ -69,7 +69,7 @@ Assume that `CC = gcc` then the appending operator is used like `CC += -w`
 then `CC` now has the value `gcc -W`
 
 
- ### Using patterns and special variables	
+ ## Using patterns and special variables	
 	
 When wildcard % appears in the dependency list, it is replaced with	
 the same string that was used to perform substitution in the target.
@@ -81,41 +81,36 @@ the same string that was used to perform substitution in the target.
   - $^ returns the names of all the dependencies with space as the delimiter
 
 
- Action modifiers	
-	
-	- (minus) Prefixing an action with - tells make to ignore any error occurs	
-	in that line. By default, execution of a Makefile stops when any command returns 
-	a non-zero (error) value. 	
-	@ (at) suppresses the standard print-action-to-standard-output behaviour of make  
-	For exampele, @echo OutputMessage will print "OutputMessage" and suppresses 	
-	printing the action echo OutputMessage. 
+## Action modifiers	
+* Prefixing an action with `-` tells make to ignore any error occurs in that line.
+. By default, execution of a Makefile stops when any command returns 
+a non-zero (error) value. 	
+* @ (at) suppresses the standard print-action-to-standard-output behaviour of make  
+For exampele,`@echo OutputMessage` will print "OutputMessage" and suppresses 	
+printing the action "echo OutputMessage". 
+
+ ## Using PHONY to avoid file-target name conflicts	
+If the project directory contains a file with same names as a special target 	
+in the Makefile (i.e. all, clean), that will result in a conflict and make will	
+produce an error. Using .PHONY directive to specify which targets are not ot be  
+considered as files, for instance, .PHONY: all clean
 
 
- Using PHONY to avoid file-target name conflicts	
-	
-	If the project directory contains a file with same names as a special target 	
-	in the Makefile (i.e. all, clean), that will result in a conflict and make will	
-	produce an error. Using .PHONY directive to specify which targets are not ot be  
-	considered as files, for instance, .PHONY: all clean
+ ## Check make execution before the actual building (dry run)	
+At times, maybe when developing the Makefile, we may want to trace the make 	
+execution (and view the logged messages) without actually running the actions,  
+which is time consuming. Simply use make -n to do a “dry run”.
 
-
- Check make execution before the actual building (dry run)	
-	
-	At times, maybe when developing the Makefile, we may want to trace the make 	
-	execution (and view the logged messages) without actually running the actions,  
-	which is time consuming. Simply use make -n to do a “dry run”.
-
- Nested Makefiles	
-	
-	To run a multiple make files in different directories, first  change directory 	
-	and then invoke make. Using the environment variable $(MAKE) gives greater 	
-	flexibility to run multiple Makefiles. For example, $(MAKE) enables passing the 
+ ## Nested Makefiles	
+To run a multiple make files in different directories, first  change directory 	
+and then invoke make. Using the environment variable $(MAKE) gives greater 	
+flexibility to run multiple Makefiles. For example, $(MAKE) enables passing the 
 	-n option for the "dry run"	
 	subdir:	
 		cd subdir %% $(MAKE)
 
 
- Using the shell command output in a variable 	
+ ## Using the shell command output in a variable 	
 	
 	Sometimes we need to use the output from one command/action in other places in the 	
 	Makefile — for example, checking versions/locations of installed libraries, or other 
