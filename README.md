@@ -5,9 +5,9 @@ To manually compile a project and produce an executable follow the following ins
 ```
 $ gcc -I . -c main.c  ->  main.o
 $ gcc -I . -c module.c ->  module.o
-$ gcc main.o module.o -o target_bin -> target binary // -I is used to include the current directory (.) as a header file location.
+$ gcc main.o module.o -o target_bin -> target binary 
+// -I is used to include the current directory (.) as a header file location.
 ```
-
 
  ## General syntax of a Makefile
 
@@ -17,7 +17,6 @@ $ gcc main.o module.o -o target_bin -> target binary // -I is used to include th
 	[TAB] action1
 	[TAB] action2
     ...
-
 
 ## General remarkes 
 1. By convention,  variable's names are written in upper-case form, i.e. CC = gcc.
@@ -33,25 +32,24 @@ all: main.o module.o 				 //dependencies of target all
 main.o: main.c module.h 			 //dependencies fo target main.o 	
 	gcc -I . -c main.c 			 //action to make target main.o ,
 module.o: module.c module.h														
-	gcc -I . -c module.c 			-I indicate header file locations	
+	gcc -I . -c module.c 			//-I indicate header file locations	
 clean:						This target has no dependencies						
 	rm -rf *.o 													
 	rm target_bin
 ```
 
- How does make utilize the timestamp of files	
-	
-	if	make found a dependency with a newer timestamp than the target, it will 
-	remake that target and all the targets that are depending on it. 
-	for example imagine we change the source file module.c. Then we tried to 
-	rebuild the program usking make. make will notice that the dependency file 
-	module.c has a newer timestamp than its target module.o. Therefore, it will 
-	remake the target module.o. However, the target all depends on module.o, as 
-	such make will remake the target all again which will result in a new target_bin 
-	binary file. Notice that make did not need to remake the main.o target because 
-	it has a new timestamp than its dependencies and such make saves compiling time. 
-	special targets are not files and such their related actions are always executed 
-	if they are specified.
+## How does make utilize the timestamp of files	
+If make found a dependency with a newer timestamp than the target, it will 
+remake that target and all the targets that are depending on it. 
+for example imagine we change the source file module.c. Then we tried to 
+rebuild the program using make. Make will notice that the dependency file 
+module.c has a newer timestamp than its target module.o. Therefore, it will 
+remake the target module.o. However, the target all depends on module.o, as 
+such make will remake the target all again which will result in a new target_bin 
+binary file. Notice that make did not need to remake the main.o target because 
+it has a new timestamp than its dependencies and such make saves compiling time. 
+special targets are not files and such their related actions are always executed 
+if they are specified.
 
 
  Dealing with assignment operator	
