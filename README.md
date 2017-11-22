@@ -52,10 +52,8 @@ if they are specified.
 	
 ### Simple assignment (:=)	
 A simple assignment expression is evaluated only once, at the very first occurance. 
-After that, every time the variable is encountered it will be replaced by the value 
-based on the first evaluation. For example: when a CC :=${GCC} ${FLAGS} first 
-encountered, CC us set ti gcc -W and every time ${CC} occurs in file, it is replaced 
-by gcc -will		
+For example, if `CC :=${GCC} ${FLAGS}` during the first encounter is evaluated to `gcc -W` then 
+each time `${CC} occurs it will be replaced with `gcc -W`.
 	
 ### Recursive assignment(=)	
 A Recursive assignment expression is evaluated everytime the variable is encountered 
@@ -71,10 +69,10 @@ Conditional assignment assigns a value to a variable only if it does not have a 
 CC = gcc 	
 CC += -w 	
 ```
-	CC now has the value gcc -W
+`CC` now has the value `gcc -W`
 
 
- Using patterns and special variables	
+ ### Using patterns and special variables	
 	
 	When wildcard % appears in the dependency list, it is replaced with	
 	the same string that was used to perform substitution in the target.
