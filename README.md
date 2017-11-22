@@ -73,7 +73,7 @@ then `CC` now has the value `gcc -W`
 	
 When wildcard % appears in the dependency list, it is replaced with	
 the same string that was used to perform substitution in the target.
-- Inside actions we can use:	
+* Inside actions we can use:	
   -$@ to represent the full target naem of the current target 	
   -$? returns the dependencies that are newer than the current target 	
   -$* returns the text that corresponds to % in the target 	
