@@ -51,15 +51,16 @@ if they are specified.
 ## Dealing with assignment operator	
 	
 ### Simple assignment (:=)	
-A simple assignment expression is evaluated only once, at the very first occurance. 
+A simple assignment expression is evaluated only once, at the very first occurrence. 
 For example, if `CC :=${GCC} ${FLAGS}` during the first encounter is evaluated to `gcc -W` then 
-each time `${CC} occurs it will be replaced with `gcc -W`.
+each time `${CC}` occurs it will be replaced with `gcc -W`.
 	
 ### Recursive assignment(=)	
 A Recursive assignment expression is evaluated everytime the variable is encountered 
-in the code. For example CC = ${GCC} {FLAGS} will be converted to gcc -W only when an
-action like ${CC} file.c is executed. However, if the variable GCC reassignment i.e 
-GCC=c++ then the ${CC} will be converted to c++ -W after the reassignment. 
+in the code. For example, a statement like ` CC = ${GCC} {FLAGS}` will be evaluated only when
+ an action like `${CC} file.c` is executed.
+ However, if the variable `GCC` is reassigned i.e 
+`GCC=c++` then the `${CC}`  will be converted to `c++ -W` after the reassignment. 
 	
 ### Conditional assignment (?=)	
 Conditional assignment assigns a value to a variable only if it does not have a value	
