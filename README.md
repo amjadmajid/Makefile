@@ -58,32 +58,27 @@ each time `${CC}` occurs it will be replaced with `gcc -W`.
 ### Recursive assignment(=)	
 A Recursive assignment expression is evaluated everytime the variable is encountered 
 in the code. For example, a statement like ` CC = ${GCC} {FLAGS}` will be evaluated only when
- an action like `${CC} file.c` is executed.
- However, if the variable `GCC` is reassigned i.e 
-`GCC=c++` then the `${CC}`  will be converted to `c++ -W` after the reassignment. 
+ an action like `${CC} file.c` is executed. However, if the variable `GCC` is reassigned i.e
+`GCC=c++` then the `${CC}` will be converted to `c++ -W` after the reassignment. 
 	
 ### Conditional assignment (?=)	
 Conditional assignment assigns a value to a variable only if it does not have a value	
 	
 ### Appending (+=)	
-```
-CC = gcc 	
-CC += -w 	
-```
-`CC` now has the value `gcc -W`
+Assume that `CC = gcc` then the appending operator is used like `CC += -w` 	
+then `CC` now has the value `gcc -W`
 
 
  ### Using patterns and special variables	
 	
-	When wildcard % appears in the dependency list, it is replaced with	
-	the same string that was used to perform substitution in the target.
-	
-	Inside actions we can use:	
-		$@ to represent the full target naem of the current target 	
-		$? returns the dependencies that are newer than the current target 	
-		$* returns the text that corresponds to % in the target 	
-		$< returns the name of the first dependency 	
-		$^ returns the names of all the dependencies with space as the delimiter
+When wildcard % appears in the dependency list, it is replaced with	
+the same string that was used to perform substitution in the target.
+- Inside actions we can use:	
+	-$@ to represent the full target naem of the current target 	
+	-$? returns the dependencies that are newer than the current target 	
+	-$* returns the text that corresponds to % in the target 	
+	-$< returns the name of the first dependency 	
+	-$^ returns the names of all the dependencies with space as the delimiter
 
 
  Action modifiers	
