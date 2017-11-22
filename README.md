@@ -41,33 +41,36 @@ clean:						This target has no dependencies
 ## How does make utilize the timestamp of files	
 If make found a dependency with a newer timestamp than the target, it will 
 remake that target and all the targets that are depending on it. 
-For example, the source file *module.c* is modified. When the program is rebuilt make will remake
-the *module.o* and the target *all* but not *main.o*.
+For example, if the source file *module.c* is modified, make will remake
+the *module.o* and the target *all*  when the program is rebuilt. However, make will not remake
+ the *main.o* since it has a newer timestamp than the source file *main.c*.
 Furthermore, special targets are not files and such their related actions are always executed 
 if they are specified.
 
 
- Dealing with assignment operator	
+## Dealing with assignment operator	
 	
-	Simple assignment (:=)	
-	A simple assignment expression is evaluated only once, at the very first occurance. 
-	After that, every time the variable is encountered it will be replaced by the value 
-	based on the first evaluation. For example: when a CC :=${GCC} ${FLAGS} first 
-	encountered, CC us set ti gcc -W and every time ${CC} occurs in file, it is replaced 
-	by gcc -will		
+### Simple assignment (:=)	
+A simple assignment expression is evaluated only once, at the very first occurance. 
+After that, every time the variable is encountered it will be replaced by the value 
+based on the first evaluation. For example: when a CC :=${GCC} ${FLAGS} first 
+encountered, CC us set ti gcc -W and every time ${CC} occurs in file, it is replaced 
+by gcc -will		
 	
-	Recursive assignment(=)	
-	A Recursive assignment expression is evaluated everytime the variable is encountered 
-	in the code. For example CC = ${GCC} {FLAGS} will be converted to gcc -W only when an
-	action like ${CC} file.c is executed. However, if the variable GCC reassignment i.e 
-	GCC=c++ then the ${CC} will be converted to c++ -W after the reassignment. 
+### Recursive assignment(=)	
+A Recursive assignment expression is evaluated everytime the variable is encountered 
+in the code. For example CC = ${GCC} {FLAGS} will be converted to gcc -W only when an
+action like ${CC} file.c is executed. However, if the variable GCC reassignment i.e 
+GCC=c++ then the ${CC} will be converted to c++ -W after the reassignment. 
 	
-	Conditional assignment (?=)	
-	Conditional assignment assigns a value to a variable only if it does not have a value	
+### Conditional assignment (?=)	
+Conditional assignment assigns a value to a variable only if it does not have a value	
 	
-	Appending (+=)	
-	CC = gcc 	
-	CC += -w 	
+### Appending (+=)	
+```
+CC = gcc 	
+CC += -w 	
+```
 	CC now has the value gcc -W
 
 
