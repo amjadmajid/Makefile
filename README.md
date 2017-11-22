@@ -41,14 +41,9 @@ clean:						This target has no dependencies
 ## How does make utilize the timestamp of files	
 If make found a dependency with a newer timestamp than the target, it will 
 remake that target and all the targets that are depending on it. 
-for example imagine we change the source file module.c. Then we tried to 
-rebuild the program using make. Make will notice that the dependency file 
-module.c has a newer timestamp than its target module.o. Therefore, it will 
-remake the target module.o. However, the target all depends on module.o, as 
-such make will remake the target all again which will result in a new target_bin 
-binary file. Notice that make did not need to remake the main.o target because 
-it has a new timestamp than its dependencies and such make saves compiling time. 
-special targets are not files and such their related actions are always executed 
+For example, the source file *module.c* is modified. When the program is rebuilt make will remake
+the *module.o* and the target *all* but not *main.o*.
+Furthermore, special targets are not files and such their related actions are always executed 
 if they are specified.
 
 
