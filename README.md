@@ -21,7 +21,7 @@ $ gcc main.o module.o -o target_bin -> target binary
 ## General remarkes 
 1. By convention,  variable's names are written in upper-case form, i.e. CC = gcc.
 2. A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
-3. If no target is specified, make is defaulted to target the first target in the Makefile.
+3. If no target is specified, make is defaulted to target the first target in a Makefile.
 4. Each make line is executed in a separate sub-shell environment. Therefore, a command like `cd newdir` will not affect the next lines.
 
 
