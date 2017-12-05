@@ -1,11 +1,11 @@
 ## Simple Makefile
  ### General syntax of a Makefile
 
-The general syntax of a Makefile rule is as follows:
+The general syntax of a Makefile *rule* is as follows:
 ```
 	target: prerequisite
-	[TAB] rule
-	[TAB] rule
+	[TAB] recipe
+	[TAB] recipe
     ...
 ```
 
