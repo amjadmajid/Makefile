@@ -7,11 +7,6 @@ OBJS = $(SRC: .c = .o) # all object files depend on the source files
 $(EXEC):$(OBJS) 
 	$(GCC) -W $^ -o $@
 
-.PHONY: test
-
-test: $(OBJS)
-	@echo $(SRC)
-	@echo $(OBJS)
 
 # a general rule to build the object files
 # the wildcard must be expanded to the same string on the both sides of the colon 
@@ -21,3 +16,10 @@ test: $(OBJS)
 clean:
 	rm -rf $(EXEC) *.o
 
+# to avoid conflict with any file named test or clean we indicate to make that 
+# these targets are PHONY
+.PHONY: test clean
+
+test: $(OBJS)
+	@echo $(SRC)
+	@echo $(OBJS)
