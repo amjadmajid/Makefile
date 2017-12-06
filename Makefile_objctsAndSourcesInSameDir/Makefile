@@ -5,7 +5,8 @@ SRC = $(wildcard src/*.c)
 # and the src directroy contains main.c and module.c files
 
 OBJS=$(SRC:.c=.o) 	# Using the "substitution References" this line will be expand to  OBJS = src/main.o src/module.o
-
+			# DON'T put a white space between the : and .  in this line. 
+		
 GCC := gcc 		# If the compiler needs to be change only here we need to change it (benefit of using variables)
 CFLAGS := -Wall  	# here the simple assignment operator is used 
 CFLAGS+= -I include/   	# The append operator is used to add to CFLAGS variable 
