@@ -18,11 +18,9 @@ The general syntax of a Makefile *rule* is as follows:
 
 
 ### How does make utilize the timestamp of files
-If make found a dependency ,which is one of the prerequistes for a target, with a newer timestamp than the target's timestamp, it will
+If make found a dependency, which is a prerequiste of a target, with a newer timestamp than the target's timestamp, it will
 rebuild that target and all the targets that depend on it.
-Considering, for example, the associated Makefile. If the source file *module.c* is modified, `make` will remake
-the *module.o* and the target *all*---since *all* depends on *module.o*---when the program is rebuilt. However, make will not remake
- the *main.o* since it has a newer timestamp than the source file *main.c*.
+Considering, for example, the associated Makefile. If the source file *module.c* is modified, `make` will remake the *module.o* and the target *all*---since *all* depends on *module.o*---when the program is rebuilt. However, make will not remake the *main.o* since it has a newer timestamp than the source file *main.c*.
 
 A *phony target* is a target that is not associated with a real file, i.e. clean.
 When it is targeted by a `make` command, i.e. `make clean`, its actions, e.g. `rm -rf *.o`, will always be executed.
