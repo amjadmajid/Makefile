@@ -1,27 +1,26 @@
-## Simple Makefile
- ### General syntax of a Makefile
-
-The general syntax of a Makefile *rule* is as follows:
+## Writing a Makefile when the source and object files are in the same directory (folder)
+#### The explanation is based on the following assumption: there are a _src_ directory in the _current working directory_, and the _src_ directroy contains _main.c_ and _module.c_ files
 ```
-	target: prerequisite
-	[TAB] recipe
-	[TAB] recipe
-    ...
+EXEC := app
+SRC  := $(wildcard src/*.c) # The `wildcard` is a `make` function that ensure the expansion of the wildcard `*`
+
+OBJS =$(SRC:.c=.o) 	    # Using the "substitution References" this line will be expand to  OBJS = src/main.o src/module.o
+			            # DON'T put a white space between the ':' and '.'  in this line. 
+		
+GCC     := gcc 		    # If the compiler needs to be change only here we need to change it (benefit of using variables)
+CFLAGS  := -Wall  	    # here the simple assignment operator is used 
+CFLAGS+= -I include/   	# The append operator is used to add to CFLAGS variable 
+
+.PHONY: all clean	    # To avoid conflicts, we explicitly tell `make` that 'all' and 'clean' are not to be considered as real files
+
+
+all:$(OBJS)             # link the object files to produce the executable
+	$(GCC)  $^ -o $@.out
+
+%.o: %.c                # build the object files
+	@echo $@ 
+	$(GCC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -rf  $(OBJS) *.out
 ```
-
-### General remarkes
-1. By convention,  variable's names are written in upper-case form, i.e. CC = gcc.
-2. A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
-3. If no target is specified, make is defaulted to target the first target in a Makefile.
-4. Each make line is executed in a separate sub-shell environment. Therefore, a command like `cd newdir` will not affect the next lines.
-
-
-
-### How does make utilize the timestamp of files
-If make found a dependency with a newer timestamp than the target, it will
-remake that target and all the targets that are depending on it.
-For example, if the source file *module.c* is modified, make will remake
-the *module.o* and the target *all*  when the program is rebuilt. However, make will not remake
- the *main.o* since it has a newer timestamp than the source file *main.c*.
-Furthermore, special targets are not files and such their related actions are always executed
-if they are specified.
