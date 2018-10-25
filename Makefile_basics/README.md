@@ -19,8 +19,8 @@ The general syntax of a Makefile *rule* is as follows:
 
 ### How does make utilize the timestamp of files
 If make found a dependency with a newer timestamp than the target, it will
-remake that target and all the targets that are depending on it.
-For example, if the source file *module.c* is modified, make will remake
+remake that target and all the targets that depend on it.
+Considering, for example, the associated Makefile. If the source file *module.c* is modified, `make` will remake
 the *module.o* and the target *all*  when the program is rebuilt. However, make will not remake
  the *main.o* since it has a newer timestamp than the source file *main.c*.
 Furthermore, special targets are not files and such their related actions are always executed
