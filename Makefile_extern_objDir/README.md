@@ -1,27 +1,44 @@
-## Simple Makefile
- ### General syntax of a Makefile
-
-The general syntax of a Makefile *rule* is as follows:
+Defining variables
 ```
-	target: prerequisite
-	[TAB] recipe
-	[TAB] recipe
-    ...
+EXEC 	:= app
+SRC_DIR := src
+BLD_DIR := build
+INC	 	:= include
+```
+The `wildcard` function ensure a safe expansion to `*`.
+The variable `SRC` will contain a list of paths to the specified source files. 
+```
+SRC  	:= $(wildcard $(SRC_DIR)/*.c)
+```
+The object files do not exist yet. Therefore, we cannot directly construct paths to them. 
+Instead, we rely on the source files' paths and replace the necessary path sections to generated
+the object paths. 
+The `make` function `patsubst` enables us to manipulate strings.
+For example, if SRC_DIR is 'src' and BLD_DIR is 'build' and the SRC is 'src/main.c', then 
+OBJS after running the blow command will be `build/main.o`
+
+```
+OBJS	:=$(patsubst $(SRC_DIR)/%.c,$(BLD_DIR)/%.o, $(SRC))
 ```
 
-### General remarkes
-1. By convention,  variable's names are written in upper-case form, i.e. CC = gcc.
-2. A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
-3. If no target is specified, make is defaulted to target the first target in a Makefile.
-4. Each make line is executed in a separate sub-shell environment. Therefore, a command like `cd newdir` will not affect the next lines.
+.PHONY: bin bld_dir clean details
 
+all: bld_dir bin
+	
+bin: $(OBJS)
+	gcc $^ -o $@.out
 
+bld_dir:
+	@mkdir -p $(BLD_DIR)
 
-### How does make utilize the timestamp of files
-If make found a dependency with a newer timestamp than the target, it will
-remake that target and all the targets that are depending on it.
-For example, if the source file *module.c* is modified, make will remake
-the *module.o* and the target *all*  when the program is rebuilt. However, make will not remake
- the *main.o* since it has a newer timestamp than the source file *main.c*.
-Furthermore, special targets are not files and such their related actions are always executed
-if they are specified.
+$(BLD_DIR)/%.o: $(SRC_DIR)/%.c 
+	@echo $@ 
+	gcc -I $(INC) -c $< -o $@
+
+clean:
+	rm -rf $(BLD_DIR) 
+	rm -rf *.out
+
+details:
+	@ echo "Source files:" $(SRC)
+	@ echo "Object files" $(OBJS)
