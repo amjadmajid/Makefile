@@ -1,61 +1,95 @@
-# Defining Variables
+# Writing a Makefile for Source and Object Files in Different Directories
 
-The following variables are declared for convenience and easy modification. `EXEC` holds the name of the final executable file, `SRC_DIR` is the source directory, `BLD_DIR` is the directory to hold the built objects, and `INC` is the directory of include files.
+In many cases, it is helpful to keep the source code and the compiled objects in separate directories to make organization easier. This guide will explain how to write a Makefile for this purpose. 
+
+The tutorial assumes that there is a `src` directory in the current working directory and a `build` directory is used to hold the object files. The `src` directory contains `main.c` and `module.c` files, and the `include` directory contains the header files.
+
+Let's start with setting some variables:
 
 ```makefile
-EXEC 	:= app
+EXEC    := app
 SRC_DIR := src
 BLD_DIR := build
-INC	 	:= include
+INC     := include
 ```
+The variables defined above are:
+- `EXEC`: Name of the final executable file
+- `SRC_DIR`: Directory of the source files
+- `BLD_DIR`: Directory to hold the built objects
+- `INC`: Directory of the header files
 
-`SRC` is assigned a list of source files using the `wildcard` function, which safely expands the `*` wildcard to match all `.c` files in the source directory.
+Now, we can use the `wildcard` function to populate the `SRC` variable with all of the C source files in our `SRC_DIR` directory:
 
 ```makefile
-SRC  	:= $(wildcard $(SRC_DIR)/*.c)
+SRC     := $(wildcard $(SRC_DIR)/*.c)
 ```
 
-`OBJS` is assigned the list of object files. Since these files don't exist yet, we construct their names from the source file names, replacing the necessary path sections to generate the object file paths. This is done using the `patsubst` function.
+We will need to compile each of these source files into an object file to be linked. These object files should be placed in `BLD_DIR`. We use the `patsubst` function to create a corresponding `.o` file in `BLD_DIR` for each source file in `SRC`.
 
 ```makefile
-OBJS	:= $(patsubst $(SRC_DIR)/%.c,$(BLD_DIR)/%.o, $(SRC))
+OBJS    := $(patsubst $(SRC_DIR)/%.c, $(BLD_DIR)/%.o, $(SRC))
 ```
 
-`.PHONY` is used to declare targets that aren't associated with files, to prevent conflicts with files of the same name.
+We will use `.PHONY` to prevent `make` from getting confused by files of the same name as our targets:
 
 ```makefile
-.PHONY: bin bld_dir clean details
+.PHONY: all bld_dir clean
 ```
 
-An error will occur if you try to build `all` target like this:
+We will create two targets `all` and `bld_dir`. The `all` target is responsible for creating the final executable. `bld_dir` is responsible for creating the build directory if it does not exist.
 
 ```makefile
-all: bld_dir $(OBJS)
-    gcc $^ -o $@.out
-```
-
-`$^` is a special `make` variable representing all the prerequisites of a target. In this case, it will be expanded to `bld_dir build/main.o build/module.o ...`. However, `bld_dir` is not an object file, so `gcc` will throw an error. To solve this problem, `bld_dir` and `bin` targets should be separated, as shown below:
-
-```makefile
-all: bld_dir bin
+all: bld_dir $(EXEC)
 	
-bin: $(OBJS)
-	gcc $^ -o $(EXEC).out
+$(EXEC): $(OBJS)
+	gcc $^ -o $(EXEC)
 
 bld_dir:
 	@mkdir -p $(BLD_DIR)
 ```
 
-In the following pattern rule, note several points:
+We need to instruct `make` how to build a `.o` file in the `BLD_DIR` from a `.c` file in the `SRC_DIR`. 
 
 ```makefile
-$(BLD_DIR)/%.o: $(SRC_DIR)/%.c 
-	@echo $@ 
+$(BLD_DIR)/%.o: $(SRC_DIR)/%.c
+	@echo Building $@...
 	gcc -I $(INC) -c $< -o $@
 ```
 
-1. `%` is a wildcard that is replaced with the same string on both sides of the `:`. This ensures that an object file with the same name as the corresponding source file is generated.
+Finally, a `clean` target is useful for removing all built files:
 
-2. The `make` utility will build the targets in the `BLD_DIR` because the target string is of the format `build/filename.o`.
+```makefile
+clean:
+	rm -rf $(BLD_DIR) $(EXEC)
+```
 
-3. Each target (like `build/filename.o`) depends on the corresponding source file (`src/filename.c`). This ensures that if the source file changes, the corresponding object file will be rebuilt.
+The complete Makefile:
+
+```makefile
+EXEC    := app
+SRC_DIR := src
+BLD_DIR := build
+INC     := include
+
+SRC     := $(wildcard $(SRC_DIR)/*.c)
+OBJS    := $(patsubst $(SRC_DIR)/%.c, $(BLD_DIR)/%.o, $(SRC))
+
+.PHONY: all bld_dir clean
+
+all: bld_dir $(EXEC)
+	
+$(EXEC): $(OBJS)
+	gcc $^ -o $(EXEC)
+
+bld_dir:
+	@mkdir -p $(BLD_DIR)
+
+$(BLD_DIR)/%.o: $(SRC_DIR)/%.c
+	@echo Building $@...
+	gcc -I $(INC) -c $< -o $@
+
+clean:
+	rm -rf $(BLD_DIR) $(EXEC)
+```
+
+When you type `make`, it will build the `all` target, creating the `build` directory if it does not exist, compile the source files into object files in the `build` directory, and link the object files into the final executable. If you type `make clean`, it will remove all built files.
