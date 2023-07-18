@@ -1,67 +1,36 @@
-### Dealing with assignment operator
+Great! Your provided generic Makefile gives an excellent starting point for most C projects. Here is a slightly edited version to ensure clarity and correctness.
 
-##### Simple assignment (:=)
-A simple assignment expression is evaluated only once, at the very first occurrence.
-For example, if `CC :=${GCC} ${FLAGS}` during the first encounter is evaluated to `gcc -W` then
-each time `${CC}` occurs it will be replaced with `gcc -W`.
+```Makefile
+CC = gcc  # If the compiler needs to be changed, we need to change it only here
+EXEC = app
+CFLAGS = -I. -Wall  # Flags for the compiler: include the current directory and turn on all warnings
+SRC = $(wildcard *.c)  # Get all the source files
+OBJS = $(SRC:.c=.o)  # Replace the .c from SRC with .o
 
-##### Recursive assignment(=)
-A Recursive assignment expression is evaluated everytime the variable is encountered
-in the code. For example, a statement like ` CC = ${GCC} {FLAGS}` will be evaluated only when
- an action like `${CC} file.c` is executed. However, if the variable `GCC` is reassigned i.e
-`GCC=c++` then the `${CC}` will be converted to `c++ -W` after the reassignment.
+# Default target is EXEC
+# It depends on the object files
+$(EXEC): $(OBJS) 
+	$(CC) $^ -o $@
 
-##### Conditional assignment (?=)
-Conditional assignment assigns a value to a variable only if it does not have a value
+# Generic rule for turning .c files into .o files
+%.o: %.c
+	$(CC) -c $(CFLAGS) $< -o $@
 
-##### Appending (+=)
-Assume that `CC = gcc` then the appending operator is used like `CC += -w` 	
-then `CC` now has the value `gcc -W`
+# Clean the build
+clean:
+	rm -rf $(EXEC) *.o
 
+# PHONY targets
+# They are not associated with files
+.PHONY: clean test
 
-### Using patterns and special variables
+# A target for printing variables
+test: 
+	@echo Source files: $(SRC)
+	@echo Object files: $(OBJS)
+```
+With this Makefile, simply typing `make` will build your program using GCC, and all C files in the current directory will be included. The `clean` target will remove all generated files. The `test` target is useful for checking what source files were found and how the object files would be named.
 
-When wildcard % appears in the dependency list, it is replaced with
-the same string that was used to perform substitution in the target.
-* Inside actions we can use:
-  - $@ to represent the full target name of the current target 	
-  - $? returns the dependencies that are newer than the current target 	
-  - $\* returns the text that corresponds to % in the target 	
-  - $< returns the name of the first dependency 	
-  - $^ returns the names of all the dependencies with space as the delimiter
+This generic Makefile assumes all C files in the directory are part of the project, and they all should be compiled and linked together. If the project structure becomes more complex, you'll need to adjust this Makefile accordingly.
 
-
-### Action modifiers
-* Prefixing an action with `-` tells make to ignore any error occurs in that line.
-. By default, execution of a Makefile stops when any command returns
-a non-zero (error) value. 	
-* @ (at) suppresses the standard print-action-to-standard-output behaviour of make  
-For exampele,`@echo OutputMessage` will print "OutputMessage" and suppresses 	
-printing the action "echo OutputMessage".
-
-### Using PHONY to avoid file-target name conflicts
-If the project directory contains a file with same names as a special target 	
-in the Makefile (i.e. all, clean), that will result in a conflict and make will
-produce an error. Using `.PHONY` directive to specify which targets are not to be  
-considered as files, for instance, `.PHONY: all clean`.
-
-
- ## Check make execution before the actual building (dry run)
-At times, maybe when developing the Makefile, we may want to trace the make 	
-execution (and view the logged messages) without actually running the actions,  
-which is time consuming. Simply use `make -n` to do a “dry run”.
-
-### Nested Makefiles	
-To run a multiple make files in different directories, first  change directory 	
-and then invoke `make`. Using the environment variable `$(MAKE)` gives greater 	
-flexibility to run multiple Makefiles. For example, `$(MAKE)` enables passing the
-`-n` option for the "dry run"
-	subdir:
-		cd subdir %% $(MAKE)
-
-
-### Using the shell command output in a variable 	
-
-Sometimes we need to use the output from one command/action in other places in the 	
-Makefile.To do that a sell command can be used. For example, to get the list of files in
-in the current directory we would run: LS_OUT = $(shell ls).
+Note: `-W` flag is replaced with `-Wall` flag in the edited version as `-W` alone doesn't represent a valid GCC warning flag.
