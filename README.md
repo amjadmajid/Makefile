@@ -1,118 +1,28 @@
-# How to write a Makefile
-				
- ## Manual compilation
-To manually compile a project and produce an executable follow the following instructions:
-```
-$ gcc -I . -c main.c  ->  main.o
-$ gcc -I . -c module.c ->  module.o
-$ gcc main.o module.o -o target_bin -> target binary 
-// -I is used to include the current directory (.) as a header file location.
-```
+# The Little Book on Makefile
 
- ## General syntax of a Makefile
+![Cover image](cover.png)
 
-	The general syntax of a Makefile rule is as follows:
+## By Amjad Yousef Majid
 
-	target: dependency1 dependency2 ...
-	[TAB] action1
-	[TAB] action2
-    ...
+Welcome to the repository of **The Little Book on Makefile**. This book aims to provide a practical and detailed introduction to the world of Makefiles, a powerful tool for automating and managing build systems, particularly for C and C++ programs. 
 
-## General remarkes 
-1. By convention,  variable's names are written in upper-case form, i.e. CC = gcc.
-2. A varaible can be accessed using one of these ${VAR}, $(VAR) syntaxes.
-3. If no target is specified, make is defaulted to target the first target in a Makefile.
-4. Each make line is executed in a separate sub-shell environment. Therefore, a command like `cd newdir` will not affect the next lines.
+In this book, we dive deep into the creation and usage of Makefiles, exploring the associated best practices and tips. Whether you're a beginner just starting out with C/C++ or an experienced developer looking to streamline your build process, this book is designed for you. 
+
+## Table of Contents
+
+1. **Introduction to Makefiles**
+   - What is a Makefile?
+   - Why use a Makefile?
+   - The anatomy of a Makefile
 
 
-##  Simple make file for our project (dependency tree structure)
-```	
-all: main.o module.o 				 //dependencies of target all 	
-	gcc main.o module.o -o target_bin	 //action to make target all	
-main.o: main.c module.h 			 //dependencies fo target main.o 	
-	gcc -I . -c main.c 			 //action to make target main.o ,
-module.o: module.c module.h														
-	gcc -I . -c module.c 			//-I indicate header file locations	
-clean:						This target has no dependencies						
-	rm -rf *.o 													
-	rm target_bin
-```
+## About the Author
 
-## How does make utilize the timestamp of files	
-If make found a dependency with a newer timestamp than the target, it will 
-remake that target and all the targets that are depending on it. 
-For example, if the source file *module.c* is modified, make will remake
-the *module.o* and the target *all*  when the program is rebuilt. However, make will not remake
- the *main.o* since it has a newer timestamp than the source file *main.c*.
-Furthermore, special targets are not files and such their related actions are always executed 
-if they are specified.
+Amjad Yousef Majid is a senior researcher with a wealth of experience spanning various domains of technology such as AI, Robotics, Cloud computing, and IoT development. His foray into these fields has yielded a robust understanding of the intricacies involved in managing and organizing complex software projects. 
 
+Passionate about knowledge sharing, Amjad seeks to bridge the gap between theory and practice through his works. With his strong background in both academia and industry, he is uniquely positioned to provide insights into the practical use of Makefiles, focusing not only on how they work, but why we use them.
 
-## Dealing with assignment operator	
-	
-### Simple assignment (:=)	
-A simple assignment expression is evaluated only once, at the very first occurrence. 
-For example, if `CC :=${GCC} ${FLAGS}` during the first encounter is evaluated to `gcc -W` then 
-each time `${CC}` occurs it will be replaced with `gcc -W`.
-	
-### Recursive assignment(=)	
-A Recursive assignment expression is evaluated everytime the variable is encountered 
-in the code. For example, a statement like ` CC = ${GCC} {FLAGS}` will be evaluated only when
- an action like `${CC} file.c` is executed. However, if the variable `GCC` is reassigned i.e
-`GCC=c++` then the `${CC}` will be converted to `c++ -W` after the reassignment. 
-	
-### Conditional assignment (?=)	
-Conditional assignment assigns a value to a variable only if it does not have a value	
-	
-### Appending (+=)	
-Assume that `CC = gcc` then the appending operator is used like `CC += -w` 	
-then `CC` now has the value `gcc -W`
+---
+Your feedback, suggestions, and contributions to improve this book are most welcome. Please feel free to create an issue or submit a pull request. 
 
-
- ## Using patterns and special variables	
-	
-When wildcard % appears in the dependency list, it is replaced with	
-the same string that was used to perform substitution in the target.
-* Inside actions we can use:	
-  - $@ to represent the full target name of the current target 	
-  - $? returns the dependencies that are newer than the current target 	
-  - $* returns the text that corresponds to % in the target 	
-  - $< returns the name of the first dependency 	
-  - $^ returns the names of all the dependencies with space as the delimiter
-
-
-## Action modifiers	
-* Prefixing an action with `-` tells make to ignore any error occurs in that line.
-. By default, execution of a Makefile stops when any command returns 
-a non-zero (error) value. 	
-* @ (at) suppresses the standard print-action-to-standard-output behaviour of make  
-For exampele,`@echo OutputMessage` will print "OutputMessage" and suppresses 	
-printing the action "echo OutputMessage". 
-
- ## Using PHONY to avoid file-target name conflicts	
-If the project directory contains a file with same names as a special target 	
-in the Makefile (i.e. all, clean), that will result in a conflict and make will	
-produce an error. Using `.PHONY` directive to specify which targets are not to be  
-considered as files, for instance, `.PHONY: all clean`.
-
-
- ## Check make execution before the actual building (dry run)	
-At times, maybe when developing the Makefile, we may want to trace the make 	
-execution (and view the logged messages) without actually running the actions,  
-which is time consuming. Simply use `make -n` to do a “dry run”.
-
- ## Nested Makefiles	
-To run a multiple make files in different directories, first  change directory 	
-and then invoke `make`. Using the environment variable `$(MAKE)` gives greater 	
-flexibility to run multiple Makefiles. For example, `$(MAKE)` enables passing the 
-`-n` option for the "dry run"	
-	subdir:	
-		cd subdir %% $(MAKE)
-
-
- ## Using the shell command output in a variable 	
-	
-Sometimes we need to use the output from one command/action in other places in the 	
-Makefile.To do that a sell command can be used. For example, to get the list of files in
-in the current directory we would run: LS_OUT = $(shell ls).
-
+Enjoy your reading!
