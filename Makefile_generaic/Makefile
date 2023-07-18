@@ -1,25 +1,28 @@
-GCC = gcc # if the compiler needs to be changed, we need to change it only here (the benefit of using a variable)
-EXEC := app
-SRC = $(wildcard *.c) # get all the source files
-OBJS = $(SRC: .c = .o) # all object files depend on the source files
+CC = gcc  # If the compiler needs to be changed, we need to change it only here
+EXEC = app
+CFLAGS = -I. -Wall  # Flags for the compiler: include the current directory and turn on all warnings
+SRC = $(wildcard *.c)  # Get all the source files
+OBJS = $(SRC:.c=.o)  # Replace the .c from SRC with .o
 
-# although the object files do not exits, we made them depending on the source files when we defined the variable OBJS
-$(EXEC):$(OBJS) 
-	$(GCC) -W $^ -o $@
+# Default target is EXEC
+# It depends on the object files
+$(EXEC): $(OBJS) 
+	$(CC) $^ -o $@
 
-
-# a general rule to build the object files
-# the wildcard must be expanded to the same string on the both sides of the colon 
+# Generic rule for turning .c files into .o files
 %.o: %.c
-	$(GCC) -I. -c $(CFLAGS) $< -o $@
+	$(CC) -c $(CFLAGS) $< -o $@
 
+# Clean the build
 clean:
 	rm -rf $(EXEC) *.o
 
-# to avoid conflict with any file named test or clean we indicate to make that 
-# these targets are PHONY
-.PHONY: test clean
+# PHONY targets
+# They are not associated with files
+.PHONY: clean test
 
-test: $(OBJS)
-	@echo $(SRC)
-	@echo $(OBJS)
+# A target for printing variables
+test: 
+	@echo Source files: $(SRC)
+	@echo Object files: $(OBJS)
+
