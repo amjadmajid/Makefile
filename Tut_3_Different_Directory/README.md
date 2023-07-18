@@ -1,53 +1,61 @@
-Defining variables
-```
+# Defining Variables
+
+The following variables are declared for convenience and easy modification. `EXEC` holds the name of the final executable file, `SRC_DIR` is the source directory, `BLD_DIR` is the directory to hold the built objects, and `INC` is the directory of include files.
+
+```makefile
 EXEC 	:= app
 SRC_DIR := src
 BLD_DIR := build
 INC	 	:= include
 ```
-The `wildcard` function ensure a safe expansion to `*`.
-The variable `SRC` will contain a list of paths to the specified source files. 
-```
+
+`SRC` is assigned a list of source files using the `wildcard` function, which safely expands the `*` wildcard to match all `.c` files in the source directory.
+
+```makefile
 SRC  	:= $(wildcard $(SRC_DIR)/*.c)
 ```
-The object files do not exist yet. Therefore, we cannot directly construct paths to them. 
-Instead, we rely on the source files' paths and replace the necessary path sections to generated
-the object paths. 
-The `make` function `patsubst` enables us to manipulate strings.
-For example, if SRC_DIR is 'src' and BLD_DIR is 'build' and the SRC is 'src/main.c', then 
-OBJS after running the blow command will be `build/main.o`
 
+`OBJS` is assigned the list of object files. Since these files don't exist yet, we construct their names from the source file names, replacing the necessary path sections to generate the object file paths. This is done using the `patsubst` function.
+
+```makefile
+OBJS	:= $(patsubst $(SRC_DIR)/%.c,$(BLD_DIR)/%.o, $(SRC))
 ```
-OBJS	:=$(patsubst $(SRC_DIR)/%.c,$(BLD_DIR)/%.o, $(SRC))
-```
-```
+
+`.PHONY` is used to declare targets that aren't associated with files, to prevent conflicts with files of the same name.
+
+```makefile
 .PHONY: bin bld_dir clean details
 ```
-Why the following two lines of code will generate an error? 
-```
+
+An error will occur if you try to build `all` target like this:
+
+```makefile
 all: bld_dir $(OBJS)
     gcc $^ -o $@.out
 ```
-The `make` special varialbe `$^` represents the entire prerequistes.
-Therefore, `gcc $^ -o $@.out` will be interpreted as `gcc bld_dir build/main.o build/module.o ...`; Since 
-bld_dir is not an object file this command will generate an error. The solution to this problem is to 
-separate these two prerequistes as it has been done below. 
 
-```
+`$^` is a special `make` variable representing all the prerequisites of a target. In this case, it will be expanded to `bld_dir build/main.o build/module.o ...`. However, `bld_dir` is not an object file, so `gcc` will throw an error. To solve this problem, `bld_dir` and `bin` targets should be separated, as shown below:
+
+```makefile
 all: bld_dir bin
 	
 bin: $(OBJS)
-	gcc $^ -o $@.out
+	gcc $^ -o $(EXEC).out
 
 bld_dir:
 	@mkdir -p $(BLD_DIR)
 ```
-There are a few points that require attention in the following code snippet.
-1. The `%` will expand to the same string on both sides of the colon `:`. Therefore, the object file will have the same name as the correspoinding source file. 
-2. The `make` utility will build the targets in the build directory since the target string is of such format `build/filename.o`
-3. Each traget, i.e. `build/filename.o`, depends on the corresponding source file, i.e. `src/filename.c`.
-```
+
+In the following pattern rule, note several points:
+
+```makefile
 $(BLD_DIR)/%.o: $(SRC_DIR)/%.c 
 	@echo $@ 
 	gcc -I $(INC) -c $< -o $@
 ```
+
+1. `%` is a wildcard that is replaced with the same string on both sides of the `:`. This ensures that an object file with the same name as the corresponding source file is generated.
+
+2. The `make` utility will build the targets in the `BLD_DIR` because the target string is of the format `build/filename.o`.
+
+3. Each target (like `build/filename.o`) depends on the corresponding source file (`src/filename.c`). This ensures that if the source file changes, the corresponding object file will be rebuilt.
