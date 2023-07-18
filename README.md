@@ -10,10 +10,13 @@ In this book, we dive deep into the creation and usage of Makefiles, exploring t
 
 ## Table of Contents
 
-1. **Introduction to Makefiles**
-   - What is a Makefile?
-   - Why use a Makefile?
-   - The anatomy of a Makefile
+1. [Introduction to Makefiles](https://github.com/amjadmajid/Makefile/tree/master/01_Introduction)
+2. [Manual Compilation](https://github.com/amjadmajid/Makefile/tree/master/02_Manual_Compilation)
+3. [Basic Makefile](https://github.com/amjadmajid/Makefile/tree/master/03_Basics)
+4. [Compile the source code in the directory of the source files](https://github.com/amjadmajid/Makefile/tree/master/04_Same_Directory)
+5. [Compile the source code in a directory that differs from the one containing the source files](https://github.com/amjadmajid/Makefile/tree/master/05_Different_Directory)
+6. [Generic Makefile](https://github.com/amjadmajid/Makefile/tree/master/05_Different_Directory)
+7. [Recap](https://github.com/amjadmajid/Makefile/tree/master/07_Recap)
 
 
 ## About the Author
